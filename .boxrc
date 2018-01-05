@@ -1,0 +1,3 @@
+[DEFAULT]
+database_folder = /home/ander/.box/
+database_name = db.sqlite3
