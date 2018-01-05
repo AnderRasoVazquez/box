@@ -53,6 +53,11 @@ class FileManager(Borg):
                 category = result["category_name"]
             if not description:
                 description = result["desc"]
+            if not tags:
+                cur = db.execute("SELECT tag_name FROM file_tags WHERE file_id=?", (file_id,))
+                tags = [t["tag_name"] for t in cur.fetchall()]
+            letter_tag = category[0].lower()
+            tags.append(letter_tag)
 
             sql_args = (name, category, description, file_id)
 
