@@ -19,6 +19,7 @@ class ConfigManager(Borg):
         """Constructor."""
         Borg.__init__(self)
         self._parser = configparser.ConfigParser()
+        # TODO recoger bien la BD, con un try catch
         self._parser.read("/home/ander/.boxrc")
         self.database_folder = self._load_db_folder()
         self.database_name = self._load_db_name()
