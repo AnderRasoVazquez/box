@@ -23,7 +23,7 @@ class FileManager(Borg):
     def add_file(self, name, category_name, desc="", tags=None):
         """Add new file."""
         with DatabaseManager() as db:
-            db._setup()
+            db.setup()
             # insert or ignore if exists
             db.execute("INSERT OR IGNORE INTO categories(name) values(?)", (category_name,))
 

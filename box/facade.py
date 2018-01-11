@@ -66,7 +66,7 @@ class Facade(Borg):
         if not isfile(self._config.database_path):
             mkdir_if_not_exists(self._config.database_folder)
             with DatabaseManager() as db:
-                db._setup()
+                db.setup()
             return True
         return False
 

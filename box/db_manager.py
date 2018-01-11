@@ -64,7 +64,7 @@ class DatabaseManager(Borg):
         """Execute multiple sql statements"""
         self._db.executemany(sql, args)
 
-    def _setup(self):
+    def setup(self):
         self._db.execute("""
             CREATE TABLE if not exists categories (
                 name TEXT PRIMARY KEY NOT NULL
@@ -108,7 +108,7 @@ class DatabaseManager(Borg):
         self._db.execute("DROP TABLE if exists files")
         self._db.execute("DROP TABLE if exists categories")
         self._db.execute("DROP TABLE if exists tags")
-        self._setup()
+        self.setup()
 
     def dump(self):
         """Return a string with database contents."""
