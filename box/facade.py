@@ -80,3 +80,7 @@ class Facade(Borg):
         if not isfile(self._config.database_path):
             exit("Database not found, try to use the command: \n$ box init")
 
+    def get_info(self, file_id):
+        """Find files."""
+        return self.file_manager.get_info(file_id)
+

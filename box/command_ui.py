@@ -89,6 +89,11 @@ class CommandUI(object):
 
         parser_init = subparsers.add_parser('init', help='initial db setup')
 
+        parser_show = subparsers.add_parser('show', help='show file info')
+        parser_show.add_argument('file_id',
+                                type=int,
+                                help='file id')
+
         return parser
 
     def test_parser(self, test_args=None):
@@ -121,13 +126,22 @@ class CommandUI(object):
             else:
                 rst_json = json.loads(result)
                 if rst_json:
-                    rst_json = json.loads(result)
                     print(format_dict_list(rst_json))
+                else:
+                    exit("No results.")
         elif args.command == "init":
             if self._facade.init():
                 print("Database created in: " + self._config.database_path)
             else:
                 exit("Database already exists in: " + self._config.database_path)
+        elif args.command == "show":
+            result = self._facade.get_info(args.file_id)
+            rst_json = json.loads(result)
+            if rst_json:
+                for key in rst_json:
+                    print("{}: {}".format(key, rst_json[key]))
+            else:
+                exit("File with id {} doesn't exist.".format(args.file_id))
 
     def _control(self, args):
         """Parse lists to strings.

@@ -138,3 +138,36 @@ class FileManager(Borg):
         """Surround string with text."""
         return surround_text + string + surround_text
 
+    def get_info(self, file_id):
+        """Gets all info about a file."""
+        with DatabaseManager() as db:
+            sql = """
+                SELECT files.id, files.name, files.desc, files.category_name
+                FROM files
+                JOIN file_tags
+                    ON files.id=file_tags.file_id
+                WHERE files.id=?
+            """
+
+            cursor = db.execute(sql, (file_id,))
+
+            result = cursor.fetchone()
+
+            if not result:
+                result = {}
+            else:
+                result = dict(result)
+
+                sql = """
+                    SELECT tag_name
+                    FROM file_tags
+                    WHERE file_id=?
+                """
+                result["tags"] = []
+                cursor = db.execute(sql, (file_id,))
+                for row in cursor.fetchall():
+                    result["tags"].append(dict(row)["tag_name"])
+
+            return json.dumps(result, indent=2)
+
+
