@@ -12,6 +12,7 @@ class CommandUI(object):
     """Handles commands."""
 
     def __init__(self):
+        """Constructor."""
         self._parser = self._build_parser()
         self._facade = Facade()
         self._config = ConfigManager()
@@ -45,8 +46,8 @@ class CommandUI(object):
 
         parser_mod = subparsers.add_parser('mod', help='modify a file')
         parser_mod.add_argument('file_id',
-                               type=int,
-                               help='file id')
+                                type=int,
+                                help='file id')
         parser_mod.add_argument('-n', '--name',
                                 nargs='+',
                                 help='file name')
@@ -66,33 +67,33 @@ class CommandUI(object):
                                 type=str,
                                 help='sql query')
         parser_sql.add_argument('-s', '--select',
-                               action="store_true",
-                               help='is a select query')
+                                action="store_true",
+                                help='is a select query')
 
         parser_find = subparsers.add_parser('find', help='find files')
         parser_find.add_argument('-n', '--name',
-                                nargs='+',
-                                help='file name')
+                                 nargs='+',
+                                 help='file name')
         parser_find.add_argument('-c', '--category',
-                                type=str,
-                                help='file\'s category')
+                                 type=str,
+                                 help='file\'s category')
         parser_find.add_argument('-d', '--description',
-                                nargs='+',
-                                help='file\'s extended description')
+                                 nargs='+',
+                                 help='file\'s extended description')
         parser_find.add_argument('-t', '--tags',
-                                type=str,
-                                nargs='+',
-                                help='file\'s tags')
+                                 type=str,
+                                 nargs='+',
+                                 help='file\'s tags')
         parser_find.add_argument('-j', '--json',
                                  action="store_true",
                                  help='export json')
 
-        parser_init = subparsers.add_parser('init', help='initial db setup')
+        subparsers.add_parser('init', help='initial db setup')
 
         parser_show = subparsers.add_parser('show', help='show file info')
         parser_show.add_argument('file_id',
-                                type=int,
-                                help='file id')
+                                 type=int,
+                                 help='file id')
 
         return parser
 
@@ -102,25 +103,30 @@ class CommandUI(object):
         return args
 
     def parse_args(self):
-        """Parse args."""
+        """Call Facades function based on args.."""
         args = self._control(self._parser.parse_args())
         if args.command == "add":
-            self._facade.add_file(args.name, args.category, args.description, args.tags)
+            self._facade.add_file(args.name, args.category,
+                                  args.description, args.tags)
         elif args.command == "rm":
             self._facade.rm_file(args.file_id)
         elif args.command == "mod":
-            optional_args = [args.name, args.category, args.description, args.tags]
+            optional_args = [args.name, args.category,
+                             args.description, args.tags]
             if all(v is None for v in optional_args):
                 exit("ERROR: provide at least one argument to modify.")
             else:
-                self._facade.mod_file(args.file_id, args.name, args.category, args.description, args.tags)
+                self._facade.mod_file(args.file_id, args.name,
+                                      args.category, args.description,
+                                      args.tags)
         elif args.command == "sql":
             result = self._facade.execute(args.sql, args.select)
             if result:
                 rst_json = json.loads(result)
                 print(format_dict_list(rst_json))
         elif args.command == "find":
-            result = self._facade.find_file(args.name, args.category, args.description, args.tags)
+            result = self._facade.find_file(args.name, args.category,
+                                            args.description, args.tags)
             if args.json:
                 print(result)
             else:
@@ -133,7 +139,8 @@ class CommandUI(object):
             if self._facade.init():
                 print("Database created in: " + self._config.database_path)
             else:
-                exit("Database already exists in: " + self._config.database_path)
+                exit("Database already exists in: " +
+                     self._config.database_path)
         elif args.command == "show":
             result = self._facade.get_info(args.file_id)
             rst_json = json.loads(result)
@@ -145,11 +152,12 @@ class CommandUI(object):
 
     def _control(self, args):
         """Parse lists to strings.
+
         With this we don't have to surround arguments in quotes.
         This:
-        box add file name with multiple words -c something -d this is a description
+        box add file long name -c something -d this is a description
         Instead of:
-        box add "file name with multiple words" -c something -d "this is a description"
+        box add "long name" -c something -d "this is a description"
         """
         if args.command in ["add", "mod", "find"]:
             if args.name:

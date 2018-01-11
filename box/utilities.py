@@ -5,7 +5,7 @@ from os.path import isdir
 
 
 def col_max_len(d_list, k):
-    """Return max len of a column of a """
+    """Return max len of a key of a list of dictionaries."""
     len_list = [len(str(d[k])) for d in d_list]
     len_list.append(len(str(k)))
     return max(len_list)
@@ -25,7 +25,8 @@ def format_dict_list(d_list, padding=4, separator=True, separator_char="-"):
     body = ""
     for d in d_list:
         for key in d.keys():
-            body += "{value:{v_len}s}".format(value=str(d[key]), v_len=max_len[key] + padding)
+            body += "{value:{v_len}s}".format(value=str(d[key]),
+                                              v_len=max_len[key] + padding)
         body += "\n"
 
     if separator:

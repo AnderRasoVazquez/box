@@ -5,6 +5,7 @@ import configparser
 
 class Borg:
     """Borg singleton pattern."""
+
     _shared_state = {}
 
     def __init__(self):

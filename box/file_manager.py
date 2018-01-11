@@ -6,6 +6,7 @@ import json
 
 class Borg:
     """Borg singleton pattern."""
+
     _shared_state = {}
 
     def __init__(self):
@@ -25,10 +26,12 @@ class FileManager(Borg):
         with DatabaseManager() as db:
             db.setup()
             # insert or ignore if exists
-            db.execute("INSERT OR IGNORE INTO categories(name) values(?)", (category_name,))
+            db.execute("INSERT OR IGNORE INTO categories(name) values(?)",
+                       (category_name,))
 
-            cursor = db.execute("INSERT INTO files(name, category_name, desc) values(?, ?, ?)",
-                                      (name, category_name, desc))
+            cursor = db.execute(
+                "INSERT INTO files(name, category_name, desc) values(?, ?, ?)",
+                (name, category_name, desc))
             letter_tag = category_name[0].lower()
             if tags:
                 tags.append(letter_tag)
@@ -54,7 +57,9 @@ class FileManager(Borg):
             if not description:
                 description = result["desc"]
             if not tags:
-                cur = db.execute("SELECT tag_name FROM file_tags WHERE file_id=?", (file_id,))
+                cur = db.execute(
+                    "SELECT tag_name FROM file_tags WHERE file_id=?",
+                    (file_id,))
                 tags = [t["tag_name"] for t in cur.fetchall()]
             letter_tag = category[0].lower()
             tags.append(letter_tag)
@@ -63,9 +68,11 @@ class FileManager(Borg):
 
             db.execute("")
             # insert or ignore if exists
-            db.execute("INSERT OR IGNORE INTO categories(name) values(?)", (category,))
+            db.execute("INSERT OR IGNORE INTO categories(name) values(?)",
+                       (category,))
 
-            db.execute("UPDATE files SET name = ?, category_name = ?, desc = ? WHERE id = ?", sql_args)
+            db.execute("UPDATE files SET name = ?, " +
+                       "category_name = ?, desc = ? WHERE id = ?", sql_args)
 
             db.execute("DELETE FROM file_tags WHERE file_id = ?", (file_id,))
 
@@ -80,12 +87,14 @@ class FileManager(Borg):
         db.executemany("INSERT OR IGNORE INTO tags values(?)", tags_tuple_list)
 
         for tag in tags:
-            db.execute("INSERT INTO file_tags(file_id, tag_name) values(?, ?)", (file_id, tag.lower()))
+            db.execute("INSERT INTO file_tags(file_id, tag_name) values(?, ?)",
+                       (file_id, tag.lower()))
 
     def find_file(self, name, category, description, tags):
         """Find files."""
         sql = """
-            SELECT files.id, files.name, files.desc, files.category_name FROM files
+            SELECT files.id, files.name, files.desc, files.category_name
+            FROM files
             JOIN file_tags
                 ON files.id=file_tags.file_id
         """
@@ -130,7 +139,6 @@ class FileManager(Borg):
             cursor = db.execute(sql, tuple(args))
             for row in cursor.fetchall():
                 dict_list.append(dict(row))
-
         return json.dumps(dict_list, indent=2)
 
     @staticmethod
@@ -139,7 +147,7 @@ class FileManager(Borg):
         return surround_text + string + surround_text
 
     def get_info(self, file_id):
-        """Gets all info about a file."""
+        """Get all info about a file."""
         with DatabaseManager() as db:
             sql = """
                 SELECT files.id, files.name, files.desc, files.category_name
@@ -169,5 +177,3 @@ class FileManager(Borg):
                     result["tags"].append(dict(row)["tag_name"])
 
             return json.dumps(result, indent=2)
-
-

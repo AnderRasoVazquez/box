@@ -12,6 +12,7 @@ from .utilities import mkdir_if_not_exists
 
 class Borg:
     """Borg singleton pattern."""
+
     _shared_state = {}
 
     def __init__(self):
@@ -62,7 +63,7 @@ class Facade(Borg):
         return self.file_manager.find_file(name, category, description, tags)
 
     def init(self):
-        """Initialize database"""
+        """Initialize database."""
         if not isfile(self._config.database_path):
             mkdir_if_not_exists(self._config.database_folder)
             with DatabaseManager() as db:
@@ -83,4 +84,3 @@ class Facade(Borg):
     def get_info(self, file_id):
         """Find files."""
         return self.file_manager.get_info(file_id)
-

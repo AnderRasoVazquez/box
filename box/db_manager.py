@@ -14,6 +14,7 @@ def regexp(expr, item):
 
 class Borg:
     """Borg singleton pattern."""
+
     _shared_state = {}
 
     def __init__(self):
@@ -54,17 +55,18 @@ class DatabaseManager(Borg):
             self._db.close()
 
     def execute(self, sql, args=None):
-        """Execute sql statement"""
+        """Execute sql statement."""
         if not args:
             return self._db.execute(sql)
         else:
             return self._db.execute(sql, args)
 
     def executemany(self, sql, args):
-        """Execute multiple sql statements"""
+        """Execute multiple sql statements."""
         self._db.executemany(sql, args)
 
     def setup(self):
+        """Create tables."""
         self._db.execute("""
             CREATE TABLE if not exists categories (
                 name TEXT PRIMARY KEY NOT NULL
@@ -81,7 +83,7 @@ class DatabaseManager(Borg):
                 name TEXT NOT NULL,
                 desc TEXT,
                 category_name TEXT NOT NULL,
-                
+
                 FOREIGN KEY(category_name)
                     REFERENCES categories(name)
             );
@@ -90,9 +92,9 @@ class DatabaseManager(Borg):
             CREATE TABLE if not exists file_tags (
                 file_id INTEGER NOT NULL,
                 tag_name TEXT NOT NULL,
-                
+
                 PRIMARY KEY(file_id, tag_name),
-                
+
                 FOREIGN KEY(file_id)
                     REFERENCES files(id)
                     ON DELETE CASCADE,
@@ -116,5 +118,3 @@ class DatabaseManager(Borg):
         for line in self._db.iterdump():
             result += line + "\n"
         return result
-
-
