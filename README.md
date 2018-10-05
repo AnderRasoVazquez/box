@@ -26,4 +26,4 @@ optional arguments:
 
 ## How to add, filter and delete a file entry
 
-![alt text](https://github.com//AnderRasoVazquez/box/blob/master/img/how_to_use.png)
+![How to use image](img/how_to_use.png)
