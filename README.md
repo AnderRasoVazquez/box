@@ -23,3 +23,7 @@ optional arguments:
   -h, --help            show this help message and exit
 
 ```
+
+## How to add, filter and delete a file entry
+
+![alt text](https://github.com//AnderRasoVazquez/box/blob/master/img/how_to_use.png)
