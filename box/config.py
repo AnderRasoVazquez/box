@@ -1,7 +1,7 @@
 """Config related class."""
 
 import configparser
-
+import os
 
 class Borg:
     """Borg singleton pattern."""
@@ -20,8 +20,7 @@ class ConfigManager(Borg):
         """Constructor."""
         Borg.__init__(self)
         self._parser = configparser.ConfigParser()
-        # TODO recoger bien la BD, con un try catch
-        self._parser.read("/home/ander/.boxrc")
+        self._parser.read(os.path.join(os.path.expanduser("~"), ".boxrc"))
         self.database_folder = self._load_db_folder()
         self.database_name = self._load_db_name()
         self.database_path = self.database_folder + self.database_name
