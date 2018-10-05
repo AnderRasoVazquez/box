@@ -3,7 +3,7 @@
 import sqlite3
 import re
 
-from .config import ConfigManager
+from config import ConfigManager
 
 
 def regexp(expr, item):

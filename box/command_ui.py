@@ -3,9 +3,9 @@
 import argparse
 import json
 
-from .facade import Facade
-from .utilities import format_dict_list
-from .config import ConfigManager
+from facade import Facade
+from utilities import format_dict_list
+from config import ConfigManager
 
 
 class CommandUI(object):

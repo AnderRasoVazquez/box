@@ -1,6 +1,6 @@
 """Manages Files."""
 
-from .db_manager import DatabaseManager
+from db_manager import DatabaseManager
 import json
 
 

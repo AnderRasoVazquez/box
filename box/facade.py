@@ -4,10 +4,10 @@ import json
 
 from os.path import isfile
 
-from .db_manager import DatabaseManager
-from .file_manager import FileManager
-from .config import ConfigManager
-from .utilities import mkdir_if_not_exists
+from db_manager import DatabaseManager
+from file_manager import FileManager
+from config import ConfigManager
+from utilities import mkdir_if_not_exists
 
 
 class Borg:

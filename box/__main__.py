@@ -1,6 +1,6 @@
 """Main module."""
 
-from .command_ui import CommandUI
+from command_ui import CommandUI
 
 
 if __name__ == '__main__':
